@@ -1,0 +1,76 @@
+```{r}
+rm(list=ls())
+setwd("~/Desktop/SBU/AMS 315/AMS 315 2021/")
+getwd()
+```
+
+Chapter 4
+
+```{r}
+#1. Generating random 1000 numbers from [0,1,...,9]
+y = c(0:9) # y = 0:9, y = c(1,2,3,4,5,6,7,8,9)
+x = sample(y, 1000, replace = T)
+x
+#2. Binomial probability e.g.Bin(10,0.6)
+# P(X = 3)
+dbinom(3,10,0.6) # pmf
+# P(X <= 3)
+pbinom(3,10,0.6) # cdf
+dbinom(0,10,0.6) + dbinom(1,10,0.6) + dbinom(2,10,0.6) + dbinom(3,10,0.6)
+x = 0 # the sum
+for(i in 0:3){
+  x = x+dbinom(i,10,0.6) #pmf
+}
+x
+
+#3. Poisson probability e.g.lambda = 10
+# P(X = 3) when X~Pois(10)
+dpois(3, 10) #pmf
+ppois(3, 10) #cdf
+
+#4. Normal distribution e.g. N(23, 25)
+# P(X <= 18)
+pnorm(18, 23, 5) # q, mean, sd
+
+#5. Generating sampling distribution of y bar
+# generate 10,000 values of y bar, with each from a unique random sample of 16 observations, from N(43, 49)
+r = 10000 # number of y bar
+y = rep(0, 16) # initial sample 
+ybar16 = rep(0,r) # initial values for 10000 ybars
+for (i in 1:r){
+  y = rnorm(16, 43, 7) # sampling
+  ybar16[i] = mean(y)
+}
+str(ybar16)
+hist(ybar16)
+mean(ybar16)
+sd(ybar16) #var(ybar) = var(Y)/n
+7/4
+```
+
+Chapter 5
+
+Z test/ T test
+```{r}
+# Z-test
+1-pnorm(1.96) # 1-sided p-value
+2*(1-pnorm(1.96)) # 2-sided p-value
+# T-test
+1-pt(1.96, 7)
+2*(1-pt(1.96, 7))
+
+grade = c(84,98,65,83,77,62,95,58,90,86)
+# One-tailed H0: mu >= 85 vs H1: mu < 85
+shapiro.test(grade) # normal test normal when p-value >= 0.05
+# Normal distributed/sigma unknown --> use T-test
+n = length(grade)
+m = mean(grade)
+s = sd(grade)
+t = (m-85)/(s/sqrt(n))
+# when alpha = 0.05
+qt(0.95, n-1)
+-t
+# t > -t alpha
+# Do not reject H0
+pvalue = pt(t, n-1, lower.tail = TRUE) # larger than 0.05, do not reject H0
+```
